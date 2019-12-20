@@ -1,16 +1,7 @@
-# Hooox
-Simple react state management based on hooks inspired by [umijs/hox](https://github.com/umijs/hox). Support **SSR** and **Lazy Load**.
+import React, { useCallback, useState, useMemo, FC } from "react";
+import { createStore, connect } from "./src/api";
 
-## API
-- `createStore: <S>(hook: StoreHook<S>, lazy = false) => UseStore<S>`
-- `UseStore.Provider` get store using render props
-- `connect` map stores to props (HOC)
-
-## Example
-- `createStore`
-```tsx
-// store.ts
-export const useCounter = createStore(() => {
+const useCounter = createStore(() => {
   const [count, setCount] = useState(0);
   const inc = useCallback(() => setCount(prev => ++prev), []);
   const dec = useCallback(() => setCount(prev => --prev), []);
@@ -22,10 +13,7 @@ export const useCounter = createStore(() => {
   }), []);
 });
 
-// MyComponent.tsx
-import { useCounter } from './store.js';
-
-export const MyComponent: FC = () => {
+const MyComponent1: FC = () => {
   const counter = useCounter();
 
   return (
@@ -36,10 +24,8 @@ export const MyComponent: FC = () => {
     </>
   );
 }
-```
-- `UseStore.Provider`
-```tsx
-export const MyComponent: FC = () => {
+
+const MyComponent2: FC = () => {
   return (
     <useCounter.Provider>
       {counter => (
@@ -52,11 +38,8 @@ export const MyComponent: FC = () => {
     </useCounter.Provider>
   );
 }
-```
-- `connect`
-```tsx
-const _MyComponent: FC = (_props) => {
-  const { counter } = _props as { counter: ReturnType<typeof useCounter> };
+
+const _MyComponent3: FC<{ originalProp: boolean, counter: ReturnType<typeof useCounter> }> = ({ counter }) => {
   return (
     <>
       <div>{counter.count}</div>
@@ -65,7 +48,15 @@ const _MyComponent: FC = (_props) => {
     </>
   );
 }
-export const MyComponent = connect({
+const MyComponent3 = connect({
   counter: useCounter,
-})(_MyComponent);
-```
+})(_MyComponent3);
+
+
+console.log(
+  <>
+    <MyComponent1 />
+    <MyComponent2 />
+    <MyComponent3 originalProp />
+  </>
+)

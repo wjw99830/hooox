@@ -1,5 +1,5 @@
-import { Store } from "./base";
-import { Updater } from "../typings";
+import { Store } from './base';
+import { Updater } from '../typings';
 
 export class ServerSideStore<S> extends Store<S> {
   host?: Updater;
