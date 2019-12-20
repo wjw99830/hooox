@@ -19,7 +19,7 @@ export const useCounter = createStore(() => {
   }), []);
 });
 
-// MyComponent.ts
+// MyComponent.tsx
 import { useCounter } from './store.js';
 
 export const MyComponent: FC = () => {
