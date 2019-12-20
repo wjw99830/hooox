@@ -1,0 +1,25 @@
+{
+  "name": "hooox",
+  "version": "0.1.0",
+  "description": "Simple react state management based on hooks.",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "typings": "typings/index.d.ts",
+  "repository": "git@github.com:wjw99830/hooox.git",
+  "author": "pigwang",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.16",
+    "@types/react-dom": "^16.9.4",
+    "rollup": "^1.27.13",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "typescript": "^3.7.3"
+  }
+}
