@@ -55,8 +55,9 @@ export const MyComponent: FC = () => {
 ```
 - `connect`
 ```tsx
-const _MyComponent: FC = (_props) => {
-  const { counter } = _props as { counter: ReturnType<typeof useCounter> };
+const _MyComponent: FC<{
+  counter: ReturnType<typeof useCounter>,
+}> = ({ counter }) => {
   return (
     <>
       <div>{counter.count}</div>
