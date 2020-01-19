@@ -9,22 +9,17 @@ import { createWithStore } from './with-store';
  * 接收一个hook，创建并返回一个新的hook，这个hook会在使用的组件里返回全局状态并订阅更新
  * @param hook 返回一个包含状态和action的对象
  */
-export function createStore<
-  T,
-  Lazy extends Nullable<boolean> = undefined,
->(
+export function createStore<T, Lazy extends Nullable<boolean> = undefined>(
   hook: StoreHook<T>,
   lazy?: Lazy
 ): UseStore<Lazy extends true ? Nullable<T> : T> {
-  return (
-    server ? createServerStore : createClientStore
-  )(hook, lazy);
+  return (server ? createServerStore : createClientStore)(hook, lazy);
 }
 
-function createClientStore<
-  T,
-  Lazy extends Nullable<boolean> = undefined,
->(hook: StoreHook<T>, lazy?: Lazy): UseStore<Lazy extends true ? Nullable<T> : T> {
+function createClientStore<T, Lazy extends Nullable<boolean> = undefined>(
+  hook: StoreHook<T>,
+  lazy?: Lazy
+): UseStore<Lazy extends true ? Nullable<T> : T> {
   const store = new ClientSideStore(hook);
   if (!lazy) {
     store.mount();
@@ -36,6 +31,7 @@ function createClientStore<
       mounted = true;
     }
     const [, updater] = useState(false);
+    store.setCurrentSubscriber(updater);
     useEffect(() => {
       store.subscribe(updater);
       return () => {
@@ -44,13 +40,15 @@ function createClientStore<
     }, []);
     return store.state as Lazy extends true ? Nullable<T> : T;
   };
-  return createWithStore(useStore as UseStore<Lazy extends true ? Nullable<T> : T>);
+  return createWithStore(
+    useStore as UseStore<Lazy extends true ? Nullable<T> : T>
+  );
 }
 
-function createServerStore<
-  T,
-  Lazy extends Nullable<boolean> = undefined,
->(hook: StoreHook<T>, lazy?: Lazy) {
+function createServerStore<T, Lazy extends Nullable<boolean> = undefined>(
+  hook: StoreHook<T>,
+  lazy?: Lazy
+) {
   const store = new ServerSideStore<T>();
   const useStore = () => {
     const [, updater] = useState(false);
@@ -61,7 +59,11 @@ function createServerStore<
       const freshState = hook();
       store.state = freshState;
     }
-    return (lazy ? undefined : store.state) as Lazy extends true ? undefined : T;
+    return (lazy ? undefined : store.state) as Lazy extends true
+      ? undefined
+      : T;
   };
-  return createWithStore(useStore as UseStore<Lazy extends true ? Nullable<T> : T>);
+  return createWithStore(
+    useStore as UseStore<Lazy extends true ? Nullable<T> : T>
+  );
 }
