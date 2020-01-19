@@ -1,6 +1,6 @@
 {
   "name": "hooox",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple react state management based on hooks.",
   "main": "dist/hooox.cjs.js",
   "module": "dist/hooox.esm.js",
@@ -11,7 +11,8 @@
   "scripts": {
     "test": "jest",
     "build": "rimraf ./dist ./typings && rollup -c",
-    "build:minify": "rimraf ./dist ./typings && rollup -c && cross-env NODE_ENV=production rollup -c"
+    "build:minify": "rimraf ./dist ./typings && rollup -c && cross-env NODE_ENV=production rollup -c",
+    "release": "yarn publish --registry=http://registry.npmjs.org"
   },
   "peerDependencies": {
     "react": "^16.8.0",
